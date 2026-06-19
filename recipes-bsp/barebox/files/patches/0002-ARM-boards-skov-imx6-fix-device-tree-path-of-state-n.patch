@@ -1,0 +1,38 @@
+From: =?UTF-8?q?Ulrich=20=C3=96lmann?= <u.oelmann@pengutronix.de>
+Date: Fri, 19 Jun 2026 14:47:03 +0200
+Subject: [PATCH] ARM: boards: skov-imx6: fix device tree path of state node
+
+The reference broke in commit [1] and led to the following error message during
+boot while fixing up the kernel devicetree:
+
+  Loading ARM Linux zImage '/mnt/nand0.firmware.ubi.system0//boot/zImage'
+  Loading devicetree from '/mnt/nand0.firmware.ubi.system0//boot/imx6dl-skov-revc-lt2.dtb'
+  ERROR: skov-imx6 machine: Node /state/ethaddr/eth2 defining the state variable not found.
+
+[1] c00df6a4b552 ("ARM: dts: Fix dtc warnings in state nodes")
+---
+ arch/arm/boards/skov-imx6/board.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/boards/skov-imx6/board.c b/arch/arm/boards/skov-imx6/board.c
+index 164833568ab9..8c837b8a8fb9 100644
+--- a/arch/arm/boards/skov-imx6/board.c
++++ b/arch/arm/boards/skov-imx6/board.c
+@@ -384,7 +384,7 @@ static int skov_imx6_switch_port(struct device_node *root, const char *path)
+ 
+ 	ret = eth2_of_fixup_node_individually(root, buf, "eth0",
+ 					      "state.ethaddr.eth2",
+-					      "/state/ethaddr/eth2");
++					      "/state/ethaddr/eth2@1e");
+ 	return ret;
+ }
+ 
+@@ -563,7 +563,7 @@ static void skov_init_board(const struct board_description *variant)
+ 
+ static int skov_set_switch_lan2_mac(struct skov_imx6_priv *priv)
+ {
+-	const char *state = "/state/ethaddr/eth2";
++	const char *state = "/state/ethaddr/eth2@1e";
+ 	struct device_node *lan2_np;
+ 	u8 ethaddr[ETH_ALEN];
+ 	int ret;
