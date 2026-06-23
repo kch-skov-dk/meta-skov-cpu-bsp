@@ -15,7 +15,7 @@ do_install:append:imx8s-cpu() {
         3.2.4|3.2.6)
             EXPECTED=e8afc6a3f874e6d772b1c5902ce1e09e
             ;;
-        3.5.5|3.5.6)
+        3.5.5|3.5.6|3.5.7)
             EXPECTED=bfdc30bd205b6ca2c15a46b17721c6f2
             ;;
         *)
